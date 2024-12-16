@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "465288527466",
+    "project_id": "fir-batch-3436c",
+    "storage_bucket": "fir-batch-3436c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465288527466:android:fa1dfdb6b7d7eb87d8d413",
+        "android_client_info": {
+          "package_name": "com.expense_app_with_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTXVxSV_gocx-ycru1to4eKU3zRTFVl10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
