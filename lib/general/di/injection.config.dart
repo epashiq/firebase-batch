@@ -15,7 +15,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import '../../features/expense/data/model/iexpense_facade.dart' as _i705;
 import '../../features/expense/repo/iexpense_impl.dart' as _i60;
 import '../../features/note/data/inote_facade.dart' as _i464;
-import '../../features/note/repo/inote_impl.dart' as _i1033;
+import '../../features/note/repo/i_note_impl.dart' as _i1033;
 import 'injectable_module.dart' as _i109;
 
 // initializes the registration of main-scope dependencies inside of GetIt

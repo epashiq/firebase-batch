@@ -89,7 +89,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>  NotePage(expenseId: exp.id!,),
+                                  builder: (context) =>  NotePage(expenseId: exp.id!,)
                                 ));
                           },
                           child: Card.outlined(
