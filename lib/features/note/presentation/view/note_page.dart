@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
+import 'package:expense_app_with_firebase/features/note/presentation/view/widgets/pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -67,11 +70,27 @@ class _NotePageState extends State<NotePage> {
                                         borderRadius:
                                             BorderRadius.circular(20))),
                               ),
-                              SwitchListTile(
-                                  value: noteProvider.isIncrease,
-                                  onChanged: (value) {
-                                    noteProvider.toggle(value);
-                                  }),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Icon(Icons.remove),
+                                  Expanded(
+                                    child: Consumer<NoteProvider>(
+                                        builder: (context, provider, c) {
+                                      return SwitchListTile(
+                                          value: provider.isIncrease,
+                                          onChanged: (value) {
+                                            log("$value");
+                                            log("OOOO : ${noteProvider.isIncrease}");
+                                            provider.toggle(value);
+                                            log("OOOO : ${noteProvider.isIncrease}");
+                                          });
+                                    }),
+                                  ),
+                                  const Icon(Icons.add)
+                                ],
+                              ),
                             ],
                           ),
                           actions: [
@@ -83,11 +102,21 @@ class _NotePageState extends State<NotePage> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                noteProvider.updateStock(
+                                int stockChange = int.tryParse(noteProvider
+                                        .stockUpdateController.text) ??
+                                    0;
+                                if (!noteProvider.isIncrease) {
+                                  stockChange = -stockChange;
+                                }
+                                PopScopeLoad.addShowDialog(
+                                    context, 'stock Updated');
+                                await noteProvider.updateStock(
                                     expenseId: widget.expenseId,
-                                    noteId: note.id!,
-                                    stock: note.stock);
+                                    noteId: note.id ?? '',
+                                    stock: stockChange);
                                 Navigator.pop(context);
+                                Navigator.pop(context);
+                                noteProvider.clearController();
                               },
                               child: const Text("Add"),
                             ),
@@ -97,8 +126,31 @@ class _NotePageState extends State<NotePage> {
                     );
                   },
                   child: Card(
-                    child: Column(
-                      children: [Text(note.note), Text(note.stock.toString())],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            note.note,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Stock : ${note.stock.toString()}',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                noteProvider.deleteNote(
+                                    expenseId: widget.expenseId,
+                                    noteId: note.id!);
+                              },
+                              child: const Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text('delete')))
+                        ],
+                      ),
                     ),
                   ),
                 );

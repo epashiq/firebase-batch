@@ -52,7 +52,7 @@ class NoteProvider with ChangeNotifier {
       },
       (success) {
         for (var element in success) {
-          log('noteId : ${element.id},/n note : ${element.note},/n  stock : ${element.stock}, /n createdAt: ${element.createdAt}');
+          log('noteId : ${element.id},\nnote : ${element.note},\nstock : ${element.stock},\ncreatedAt: ${element.createdAt}');
         }
         noteList.clear();
         noteList.addAll(success);
@@ -76,15 +76,47 @@ class NoteProvider with ChangeNotifier {
     final result = await inoteFacade.updateStock(
         expenseId: expenseId, noteId: noteId, stock: stock);
 
-        result.fold((failure) {
-          log(failure.errorMessage);
-        }, (success) {
-        
-        },);
+    result.fold(
+      (failure) {
+        log(failure.errorMessage);
+      },
+      (success) async {
+        log('stock updated succesfully');
+        await fetchNoted(expenseId: expenseId);
+      },
+    );
+
+    notifyListeners();
   }
 
-  void toggle(bool value){
-    isIncrease = value;
+  Future<void> deleteNote(
+      {required String expenseId, required String noteId}) async {
+    final results =
+        await inoteFacade.deleteNote(expenseId: expenseId, noteId: noteId);
+
+    results.fold(
+      (failure) {
+        log(failure.errorMessage);
+      },
+      (success) {
+        noteList.removeWhere((note) => note.id == noteId);
+        log('delete note');
+      },
+    );
+
+    notifyListeners();
+  }
+
+  void toggle(bool value) {
+    isIncrease = !isIncrease;
+    log("isIncrease: $isIncrease");
+    notifyListeners();
+  }
+
+  void clearController() {
+    noteController.clear();
+    stockController.clear();
+    stockUpdateController.clear();
     notifyListeners();
   }
 }

@@ -30,12 +30,10 @@ class InoteImpl implements InoteFacade {
     }
   }
 
- 
   @override
   Future<Either<MainFailure, List<NoteModel>>> fetchNotes(
       {required String expenseId}) async {
     try {
-     
       final expenseDoc =
           await firebaseFirestore.collection('expense').doc(expenseId).get();
 
@@ -66,9 +64,7 @@ class InoteImpl implements InoteFacade {
   }
 
   @override
-  void clearData() {
-  
-  }
+  void clearData() {}
 
   @override
   Future<Either<MainFailure, void>> updateStock(
@@ -80,6 +76,21 @@ class InoteImpl implements InoteFacade {
 
       await expenseRef.update({
         'notes.$noteId.stock': FieldValue.increment(stock),
+      });
+
+      return right(null);
+    } catch (e) {
+      return left(MainFailure.serverFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<MainFailure, void>> deleteNote(
+      {required String expenseId, required String noteId}) async {
+    try {
+      final expenseRef = firebaseFirestore.collection('expense').doc(expenseId);
+      await expenseRef.update({
+        'notes.$noteId': FieldValue.delete(),
       });
 
       return right(null);

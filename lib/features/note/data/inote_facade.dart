@@ -15,4 +15,10 @@ abstract class InoteFacade {
   Future<Either<MainFailure,void>> updateStock({required String expenseId,required String noteId,required int stock})async{
     throw UnimplementedError('not Updating stock');
   }
+
+  Future<Either<MainFailure,void>> deleteNote({required String expenseId,required String noteId})async{
+    throw UnimplementedError('failed to delete note');
+  }
+
+  
 }
